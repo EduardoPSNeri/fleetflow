@@ -7,6 +7,7 @@ Não contém regras de negócio.
 
 veiculos = []
 
+##CONSULTA MAIOR NUMERO DE FROTA
 def buscar_ultimo_numero_frota(veiculos):
 
     if not veiculos:
@@ -21,6 +22,7 @@ def buscar_ultimo_numero_frota(veiculos):
     return maior_numero
 
 
+##BUSCA SE JÁ EXISTE A PLACA CADASTRADA
 def buscar_placa(veiculos, placa_procurada):
     
     for veiculo in veiculos:
@@ -28,3 +30,7 @@ def buscar_placa(veiculos, placa_procurada):
             return veiculo
     return None
     
+
+##ADICIONA UM VEICULO
+def adicionar_veiculo(veiculos, novo_veiculo):
+    veiculos.append(novo_veiculo)
