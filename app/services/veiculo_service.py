@@ -1,5 +1,5 @@
 from app.models.veiculo_model import Veiculo
-from app.repositories.veiculo_repository import *
+from app.repositories.veiculo_repository import (buscar_placa, buscar_ultimo_numero_frota, adicionar_veiculo)
 
 
 def gerar_numero_frota(ultimo_numero_frota):
@@ -39,13 +39,3 @@ def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
     
     
     
-    
-    
-    
-    
-    
-"""
-veiculo_existente = buscar_placa(veiculos, placa)
-    if veiculo_existente is not None:
-        return "Já existe um veículo cadastrado com esta placa." 
-"""
