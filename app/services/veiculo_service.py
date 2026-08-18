@@ -9,7 +9,26 @@ def gerar_numero_frota(ultimo_numero_frota):
     return ultimo_numero_frota + 1
 
 
+def validar_placa(placa):
+
+    if len(placa) != 8:
+        return False, "Placa inválida"
+
+    if not placa[0:3].isalpha():
+        return False, "Placa inválida"
+
+    if placa[3] != "-":
+        return False, "Placa inválida"
+
+    if not placa[4:].isdigit():
+        return False, "Placa inválida"
+
+    return True, "Placa Válida"
+
+
 def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
+    
+    placa = placa.upper()
 
     veiculo_existente = buscar_placa(veiculos, placa)
 
@@ -19,14 +38,8 @@ def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
     ultimo_numero_frota = buscar_ultimo_numero_frota(veiculos)
     proximo_numero = gerar_numero_frota(ultimo_numero_frota)
 
-    novo_veiculo = Veiculo(
-        proximo_numero,
-        placa,
-        marca,
-        modelo,
-        km
-    )
-
+    novo_veiculo = Veiculo(proximo_numero, placa, marca, modelo, km)
+  
     adicionar_veiculo(veiculos, novo_veiculo)
 
     return "Veículo cadastrado com sucesso"
