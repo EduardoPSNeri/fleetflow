@@ -26,9 +26,35 @@ def validar_placa(placa):
     return True, "Placa Válida"
 
 
+def validar_mercosul(placa):
+    
+    if len(placa) != 7:
+        return False, "Placa Mercosul invalida"
+    
+    if not placa[0:3].isalpha():
+        return False, "Placa Mercosul invalida"
+    
+    if not placa[3].isdigit():
+        return False, "Placa Mercosul invalida"
+
+    if not placa[4].isalpha():
+        return False, "Placa Mercosul invalida"
+
+    if not placa[5:7].isdigit():
+        return False, "Placa Mercosul invalida"
+    
+    return True, "Placa Mercosul valida"
+    
+
+
 def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
     
     placa = placa.upper()
+    
+    placa_valida, mensagem = validar_placa(placa)
+    if not placa_valida:
+        return mensagem
+    
 
     veiculo_existente = buscar_placa(veiculos, placa)
 
