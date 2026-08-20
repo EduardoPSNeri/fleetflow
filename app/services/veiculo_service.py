@@ -1,5 +1,6 @@
 from app.models.veiculo_model import Veiculo
-from app.repositories.veiculo_repository import (buscar_placa, buscar_ultimo_numero_frota, adicionar_veiculo)
+from app.repositories.veiculo_repository import (
+    buscar_placa, buscar_ultimo_numero_frota, adicionar_veiculo)
 
 
 def gerar_numero_frota(ultimo_numero_frota):
@@ -9,7 +10,7 @@ def gerar_numero_frota(ultimo_numero_frota):
     return ultimo_numero_frota + 1
 
 
-def validar_placa(placa):
+def validar_placa_antiga(placa):
 
     if len(placa) != 8:
         return False, "Placa inválida"
@@ -45,25 +46,38 @@ def validar_mercosul(placa):
     
     return True, "Placa Mercosul valida"
     
-
+def validar_km():
+    if km <= 0:
+        return False, "KM invalido"
+    return True, "KM Válido"
 
 def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
     
     placa = placa.upper()
     
-    placa_valida, mensagem = validar_placa(placa)
-    if not placa_valida:
+    #1 - Validações dos dados recebidos
+    placa_valida_antiga, mensagem_antiga = validar_placa_antiga(placa)
+    placa_mercosul_valida, mensagem_mercosul = validar_mercosul(placa)
+    
+    if not (placa_valida_antiga or placa_mercosul_valida):
+        return (mensagem_antiga or mensagem_mercosul)
+    
+    km_valido, mensagem = validar_km(km)
+    
+    if not km_valido:
         return mensagem
     
-
+    #2 - Consulta o Repository
     veiculo_existente = buscar_placa(veiculos, placa)
 
     if veiculo_existente is not None:
         return "Veículo já cadastrado"
-
+    
+    #3 - Gera o numero da frota 
     ultimo_numero_frota = buscar_ultimo_numero_frota(veiculos)
     proximo_numero = gerar_numero_frota(ultimo_numero_frota)
 
+    #4 - salva o objeto
     novo_veiculo = Veiculo(proximo_numero, placa, marca, modelo, km)
   
     adicionar_veiculo(veiculos, novo_veiculo)
