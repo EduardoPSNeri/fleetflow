@@ -45,11 +45,19 @@ def validar_mercosul(placa):
         return False, "Placa Mercosul invalida"
     
     return True, "Placa Mercosul valida"
+
     
-def validar_km():
+def validar_km(km):
     if km <= 0:
         return False, "KM invalido"
     return True, "KM Válido"
+
+
+def atualizar_km(km):
+    km = novo_km
+    if novo_km <= km:
+        return "km Invalido"
+    return km, "km atualizado"
 
 def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
     
@@ -85,10 +93,24 @@ def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
     return "Veículo cadastrado com sucesso"
 
 
+def inativar_veiculo(veiculos, placa):
+    veiculo_encontrado = buscar_placa(veiculos, placa)
+    if not veiculo_encontrado:
+        return "Veiculo não encontrado"
 
+    return veiculo_encontrado.inativar()
 
-
+    
+def ativar_veiculo(veiculos, placa):
+    veiculo_informado = buscar_placa(veiculos, placa)
+    if not veiculo_informado:
+        return "veiculo nao encontrado"
+    
+    return veiculo_informado.ativar()
     
     
-    
-    
+def atualizar_km_veiculo (veiculos, placa, novo_km):
+    atualizar_km = buscar_placa(veiculos, placa)
+    if not atualizar_km:
+        return "Veiculo não encontrado"
+    return 

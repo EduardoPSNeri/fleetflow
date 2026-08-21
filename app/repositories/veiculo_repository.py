@@ -34,3 +34,6 @@ def buscar_placa(veiculos, placa_procurada):
 ##ADICIONA UM VEICULO
 def adicionar_veiculo(veiculos, novo_veiculo):
     veiculos.append(novo_veiculo)
+    
+    
+
