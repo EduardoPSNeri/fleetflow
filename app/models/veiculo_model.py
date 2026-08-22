@@ -13,12 +13,14 @@ class Veiculo:
         self.km = km
         self.ativo = True
         
+        
     def inativar(self):
         if not self.ativo:
             return("O veículo já está inativo.")
     
         self.ativo = False
         return("veículo inativo com sucesso")
+
 
     def ativar(self):
         if self.ativo:
@@ -27,3 +29,10 @@ class Veiculo:
         self.ativo = True
         return "Veículo ativado com sucesso."
     
+
+    def atualizar_km(self, novo_km):
+        if novo_km <= self.km:
+            return "km Invalido"
+        self.km = novo_km
+        return novo_km, "km atualizado"
+

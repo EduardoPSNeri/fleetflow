@@ -2,6 +2,7 @@ from app.models.veiculo_model import Veiculo
 from app.repositories.veiculo_repository import (
     buscar_placa, buscar_ultimo_numero_frota, adicionar_veiculo)
 
+## validações 
 
 def gerar_numero_frota(ultimo_numero_frota):
     if ultimo_numero_frota is None:
@@ -46,18 +47,13 @@ def validar_mercosul(placa):
     
     return True, "Placa Mercosul valida"
 
-    
+
 def validar_km(km):
     if km <= 0:
         return False, "KM invalido"
     return True, "KM Válido"
 
-
-def atualizar_km(km):
-    km = novo_km
-    if novo_km <= km:
-        return "km Invalido"
-    return km, "km atualizado"
+## açoes - cadastro, atualizaçoes
 
 def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
     
@@ -110,7 +106,7 @@ def ativar_veiculo(veiculos, placa):
     
     
 def atualizar_km_veiculo (veiculos, placa, novo_km):
-    atualizar_km = buscar_placa(veiculos, placa)
-    if not atualizar_km:
+    veiculo_encontrado = buscar_placa(veiculos, placa)
+    if not veiculo_encontrado:
         return "Veiculo não encontrado"
-    return 
+    return veiculo_encontrado.atualizar_km(novo_km)
