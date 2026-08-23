@@ -34,5 +34,5 @@ class Veiculo:
         if novo_km <= self.km:
             return "km Invalido"
         self.km = novo_km
-        return novo_km, "km atualizado"
+        return "km atualizado"
 
