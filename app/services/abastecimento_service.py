@@ -1,6 +1,6 @@
 from app.models.abastecimento_model import Abastecimento
-from app.repositories.abastecimento_repository import (adicionar_abastecimento, buscar_ultimo_abastecimento)
-from app.services.veiculo_service import (buscar_placa, validar_km)
+from app.repositories.abastecimento_repository import (adicionar_abastecimento, buscar_ultimo_abastecimento, abastecimento_por_veiculo)
+from app.services.veiculo_service import (buscar_placa)
 
 
 
@@ -57,14 +57,14 @@ def cadastrar_abastecimento(abastecimentos,veiculos,placa,data,km,combustivel,va
     return "Abastecimento cadastrado com sucesso"
 
 
-def historio_abastecimento_veiculo(viculo, abastecimenbto, placa):
+def historio_abastecimento_veiculo(veiculo, abastecimento, placa):
     
     veiculo_encontrado = buscar_placa(veiculos, placa)
     
     if not veiculo_encontrado:
         return "Veiculo não encontrado"
     
-    historico = historio_abastecimento_veiculo(Abastecimento, veiculo_encontrado)
+    historico = abastecimento_por_veiculo(Abastecimento, veiculo_encontrado)
     
     if not historico:
         return "Nenhum abastecimento Registrado"
