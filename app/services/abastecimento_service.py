@@ -119,7 +119,7 @@ def resumo_abastecimento_veiculo(veiculos, abastecimentos, placa):
     if isinstance (historico, str):
         return historico
     
-    gerar_resumo_abastecimento(historico)
+    return gerar_resumo_abastecimento(historico)
         
         
         
