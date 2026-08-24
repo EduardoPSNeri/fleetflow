@@ -57,14 +57,14 @@ def cadastrar_abastecimento(abastecimentos,veiculos,placa,data,km,combustivel,va
     return "Abastecimento cadastrado com sucesso"
 
 
-def historio_abastecimento_veiculo(veiculo, abastecimento, placa):
+def historico_abastecimento_veiculo(veiculos, abastecimentos, placa):
     
     veiculo_encontrado = buscar_placa(veiculos, placa)
     
     if not veiculo_encontrado:
         return "Veiculo não encontrado"
     
-    historico = abastecimento_por_veiculo(Abastecimento, veiculo_encontrado)
+    historico = abastecimento_por_veiculo(abastecimentos, veiculo_encontrado)
     
     if not historico:
         return "Nenhum abastecimento Registrado"
@@ -72,4 +72,56 @@ def historio_abastecimento_veiculo(veiculo, abastecimento, placa):
     return historico
     
     
+def calcular_total_gasto(historico):
     
+    total  = 0
+    
+    for abastecimento in historico:
+        total = total + abastecimento.valor_total
+        
+    return total
+    
+    
+def calcular_total_litros(historico):
+    
+    total = 0
+    
+    
+    for abastecimento in historico:
+        total = total + abastecimento.quantidade_litro
+        
+    return total
+    
+    
+def quantidade_abastecimento(historico):
+    total = len(historico)
+    return total
+
+
+def gerar_resumo_abastecimento(historico):
+    
+    total_gasto = calcular_total_gasto(historico)
+    total_litros = calcular_total_litros(historico)
+    quantidade = quantidade_abastecimento(historico)
+    
+    return{
+        "Total_Gasto": total_gasto,
+        "Total_abastecido": total_litros,
+        "Quantidade_abastecimento":quantidade
+        
+    }
+    
+    
+
+def resumo_abastecimento_veiculo(veiculos, abastecimentos, placa):
+    
+    historico = historico_abastecimento_veiculo(veiculos, abastecimentos, placa)    
+    if isinstance (historico, str):
+        return historico
+    
+    gerar_resumo_abastecimento(historico)
+        
+        
+        
+        
+        
