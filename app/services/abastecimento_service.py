@@ -45,6 +45,11 @@ def cadastrar_abastecimento(abastecimentos,veiculos,placa,data,km,combustivel,va
     else:
         distancia_percorrida = km - ultimo_abastecimento.km
         media_consumo = distancia_percorrida / quantidade_litro
+        custo_por_km_anterior = (ultimo_abastecimento.valor_total / distancia_percorrida)
+
+        ultimo_abastecimento.custo_por_km = custo_por_km_anterior
+        
+        
 
     novo_abastecimento = Abastecimento(data,veiculo_encontrado,km,combustivel,valor_litro,quantidade_litro)
 
@@ -140,7 +145,7 @@ def calcular_custo_por_km(historico):
    custo_por_km = total_gasto / distancia
    
    return custo_por_km
- 
+
 
 #relatorios
 
