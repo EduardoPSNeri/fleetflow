@@ -9,6 +9,8 @@ class Abastecimento:
         self.quantidade_litro = quantidade_litro
         self.valor_total = valor_litro * quantidade_litro
         self.media_consumo = None
+        self.custo_por_km = None
+        
         
         
         

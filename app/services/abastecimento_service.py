@@ -70,6 +70,23 @@ def historico_abastecimento_veiculo(veiculos, abastecimentos, placa):
         return "Nenhum abastecimento Registrado"
     
     return historico
+   
+
+def calcular_media_consumo_geral(historico):
+
+    soma_medias = 0
+    quantidade_medias = 0
+
+    for abastecimento in historico:
+        
+        if  abastecimento.media_consumo is not None:
+            soma_medias += abastecimento.media_consumo 
+            quantidade_medias += 1
+            
+    if quantidade_medias == 0:
+        return None
+           
+    return soma_medias / quantidade_medias
     
     
 def calcular_total_gasto(historico):
@@ -98,21 +115,53 @@ def quantidade_abastecimento(historico):
     return total
 
 
+def calcular_distancia_historico(historico):
+    
+    if len(historico) < 2:
+        return None
+    
+    inicial_km = historico[0].km
+    ultimo_km =  historico[-1].km
+ 
+    distancia_percorrida = ultimo_km - inicial_km
+    
+    return distancia_percorrida
+ 
+
+def calcular_custo_por_km(historico):
+    
+   distancia = calcular_distancia_historico(historico)
+   
+   if distancia is None:
+       return None
+   
+   total_gasto = calcular_total_gasto(historico)
+   
+   custo_por_km = total_gasto / distancia
+   
+   return custo_por_km
+ 
+
+#relatorios
+
 def gerar_resumo_abastecimento(historico):
     
     total_gasto = calcular_total_gasto(historico)
     total_litros = calcular_total_litros(historico)
     quantidade = quantidade_abastecimento(historico)
+    media_consumo =calcular_media_consumo_geral(historico)
+    custo_km = calcular_custo_por_km(historico)
     
     return{
         "Total_Gasto": total_gasto,
         "Total_abastecido": total_litros,
-        "Quantidade_abastecimento":quantidade
+        "Quantidade_abastecimento":quantidade,
+        "Media_Consumo":media_consumo,
+        "Custo_KM": custo_km,
         
     }
     
     
-
 def resumo_abastecimento_veiculo(veiculos, abastecimentos, placa):
     
     historico = historico_abastecimento_veiculo(veiculos, abastecimentos, placa)    
@@ -122,6 +171,8 @@ def resumo_abastecimento_veiculo(veiculos, abastecimentos, placa):
     return gerar_resumo_abastecimento(historico)
         
         
-        
-        
+
+
+      
+      
         
