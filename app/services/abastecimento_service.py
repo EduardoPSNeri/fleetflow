@@ -1,4 +1,4 @@
-from app.models.abastecimento_model import Abastecimento
+from app.models.abastecimento_model import (Abastecimento, validar_combustivel)
 from app.repositories.abastecimento_repository import (adicionar_abastecimento, buscar_ultimo_abastecimento, abastecimento_por_veiculo)
 from app.services.veiculo_service import (buscar_placa)
 
@@ -9,6 +9,7 @@ def validar_valor_litro(valor_litro):
     if valor_litro <= 0:
         return False, "Valor litro invalido"
     return True, "valor do litro válido"
+
 
 def validar_quantidade_litro(quantidade_litro):
     if quantidade_litro <= 0:
@@ -35,6 +36,14 @@ def cadastrar_abastecimento(abastecimentos,veiculos,placa,data,km,combustivel,va
     
     if km <= veiculo_encontrado.km:
         return "km de abastecimento Invalido"
+    
+    combustivel_valido, combustivel_padronizado = validar_combustivel(combustivel)
+
+    if not combustivel_valido:
+        return combustivel_padronizado
+
+    combustivel = combustivel_padronizado
+        
     
     ultimo_abastecimento = buscar_ultimo_abastecimento(abastecimentos,veiculo_encontrado)
 
@@ -148,13 +157,6 @@ def calcular_media_custo_por_km(historico):
     return soma_custos / quantidade
         
     
-    
-    
-    
-    
-    
-    
-
 #relatorios
 def gerar_resumo_abastecimento(historico):
     
