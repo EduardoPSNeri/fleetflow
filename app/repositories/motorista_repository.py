@@ -1,15 +1,71 @@
-def adicionar_motorista(motoristas, novo_motorista):
-    motoristas.append(novo_motorista)
-    return novo_motorista
+from app.database.database import conectar
 
 
-def buscar_cpf(motoristas, cpf_procurado):
-    for motorista in motoristas:
-        if motorista.cpf == cpf_procurado:
-            return motorista
-    return None
+def adicionar_motorista_banco(nome, cpf, cnh, categoria_cnh, ativo):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        INSERT INTO motoristas (
+            nome,
+            cpf,
+            cnh,
+            categoria_cnh,
+            ativo
+        )
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        nome,
+        cpf,
+        cnh,
+        categoria_cnh,
+        ativo
+    ))
+
+    conexao.commit()
+    conexao.close()
 
 
-def motoristas_cadastrados(motoristas):
+def buscar_cpf_banco(cpf):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT * FROM motoristas
+        WHERE cpf = ?
+    """, (cpf,))
+
+    motorista = cursor.fetchone()
+
+    conexao.close()
+
+    return motorista
+
+
+def listar_motoristas_banco():
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT * FROM motoristas
+    """)
+
+    motoristas = cursor.fetchall()
+
+    conexao.close()
+
     return motoristas
-        
+
+
+def atualizar_status_motorista_banco(cpf, ativo):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        UPDATE motoristas
+        SET ativo = ?
+        WHERE cpf = ?
+    """, (ativo, cpf))
+
+    conexao.commit()
+    conexao.close()

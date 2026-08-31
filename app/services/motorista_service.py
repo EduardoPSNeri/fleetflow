@@ -1,36 +1,65 @@
 from app.models.motorista_model import Motorista
-from app.repositories.motorista_repository import(adicionar_motorista, buscar_cpf,motoristas_cadastrados )
+from app.repositories.motorista_repository import (
+    adicionar_motorista_banco,
+    buscar_cpf_banco,
+    atualizar_status_motorista_banco
+)
 
 
-def cadastro_motorista(motoristas, nome, cpf, cnh, categoria_cnh):
-    
-    cpf_existente = buscar_cpf(motoristas, cpf)
+def cadastro_motorista(nome, cpf, cnh, categoria_cnh):
 
-    if cpf_existente is not None:
+    motorista_existente = buscar_cpf_banco(cpf)
+
+    if motorista_existente is not None:
         return "CPF já cadastrado"
 
-    novo_motorista = Motorista(nome, cpf, cnh, categoria_cnh)
+    novo_motorista = Motorista(
+        nome,
+        cpf,
+        cnh,
+        categoria_cnh
+    )
 
-    adicionar_motorista(motoristas, novo_motorista)
+    adicionar_motorista_banco(
+        novo_motorista.nome,
+        novo_motorista.cpf,
+        novo_motorista.cnh,
+        novo_motorista.categoria_cnh,
+        novo_motorista.ativo
+    )
 
     return "Motorista cadastrado com sucesso"
 
 
-def inativar_motorista(motoristas, cpf):
-    motorista_encontrado = buscar_cpf(motoristas, cpf)
+def inativar_motorista(cpf):
+
+    motorista_encontrado = buscar_cpf_banco(cpf)
 
     if not motorista_encontrado:
         return "Motorista não encontrado"
 
-    return motorista_encontrado.inativar()
+    ativo = motorista_encontrado[5]
+
+    if not ativo:
+        return "Motorista já está inativo."
+
+    atualizar_status_motorista_banco(cpf, False)
+
+    return "Motorista inativado com sucesso"
 
 
-def ativar_motorista(motoristas, cpf):
-    motorista_encontrado = buscar_cpf(motoristas, cpf)
+def ativar_motorista(cpf):
+
+    motorista_encontrado = buscar_cpf_banco(cpf)
 
     if not motorista_encontrado:
         return "Motorista não encontrado"
 
-    return motorista_encontrado.ativar()
+    ativo = motorista_encontrado[5]
 
+    if ativo:
+        return "Motorista já está ativo."
 
+    atualizar_status_motorista_banco(cpf, True)
+
+    return "Motorista ativado com sucesso"

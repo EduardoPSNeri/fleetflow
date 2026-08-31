@@ -58,6 +58,46 @@ def criar_tabela_abastecimentos():
     conexao.close()
 
 
+def criar_tabela_motoristas():
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS motoristas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            cpf TEXT,
+            cnh TEXT,
+            categoria_cnh TEXT,
+            ativo INTEGER
+        )
+    """)
+
+    conexao.commit()
+    conexao.close()
+
+
+def criar_tabela_diario_bordo():
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS diario_bordo (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            veiculo_id INTEGER,
+            motorista_id INTEGER,
+            data TEXT,
+            hora_saida TEXT,
+            km_saida REAL,
+            hora_chegada TEXT,
+            km_chegada REAL
+        )
+    """)
+
+    conexao.commit()
+    conexao.close()
+
+
 
 
 

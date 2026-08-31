@@ -26,9 +26,6 @@ def cadastrar_abastecimento(placa,data,km,combustivel,valor_litro,quantidade_lit
     veiculo_id = veiculo_encontrado[0]
     km_atual = veiculo_encontrado[5]
 
-    if km <= km_atual:
-        return "KM de abastecimento inválido"
-
     valor_valido, mensagem = validar_valor_litro(valor_litro)
 
     if not valor_valido:
@@ -53,7 +50,10 @@ def cadastrar_abastecimento(placa,data,km,combustivel,valor_litro,quantidade_lit
         ultimo_abastecimento_id = ultimo_abastecimento[0]
         ultimo_km = ultimo_abastecimento[3]
         ultimo_valor_total = ultimo_abastecimento[7]
-
+        
+        if km <= km_atual:
+            return "KM de abastecimento inválido"
+        
         distancia_percorrida = km - ultimo_km
 
         media_consumo = distancia_percorrida / quantidade_litro
