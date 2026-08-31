@@ -1,21 +1,23 @@
-from app.services.veiculo_service import (
-cadastrar_veiculo)
-from app.services.abastecimento_service import (cadastrar_abastecimento, historico_abastecimento_veiculo,
-resumo_abastecimento_veiculo)
+from app.services.motorista_service import (
+    cadastro_motorista,
+    inativar_motorista,
+    ativar_motorista
+)
 
-veiculos = []
-abastecimentos = []
-resultado = cadastrar_veiculo(veiculos, "ABC-1234", "Fiat", "palio", 130000)
+motoristas = []
 
+print(
+    cadastro_motorista(
+        motoristas,
+        "João Silva",
+        "12345678900",
+        "123456789",
+        "B"
+    )
+)
 
-resultado1 = cadastrar_abastecimento(abastecimentos,veiculos,"ABC-1234","25/08/2026",131000,"Gasolina Comum",6.00,50)
-#resultado2 = cadastrar_abastecimento(abastecimentos,veiculos,"ABC-1234","25/08/2026",131500,"Gasolina",6.00,50)
-#resultado2 = cadastrar_abastecimento(abastecimentos,veiculos,"ABC-1234","25/08/2026",132000,"Gasolina",6.00,50)
+print(inativar_motorista(motoristas, "12345678900"))
+print(inativar_motorista(motoristas, "12345678900"))
 
-resumo = resumo_abastecimento_veiculo(veiculos, abastecimentos, "ABC-1234")
-print(resultado1)
-print(resumo)
-print("Custo/km primeiro:", abastecimentos[0].custo_por_km)
-print("Custo/km segundo:", abastecimentos[1].custo_por_km) 
-print("Custo/km segundo:", abastecimentos[2].custo_por_km)
-
+print(ativar_motorista(motoristas, "12345678900"))
+print(ativar_motorista(motoristas, "12345678900"))

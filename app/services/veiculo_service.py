@@ -55,7 +55,7 @@ def validar_km(km):
 
 ## açoes - cadastro, atualizaçoes
 
-def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
+def cadastrar_veiculo(veiculos, placa, marca, modelo, km, combustiveis):
     
     placa = placa.upper()
     
@@ -82,7 +82,7 @@ def cadastrar_veiculo(veiculos, placa, marca, modelo, km):
     proximo_numero = gerar_numero_frota(ultimo_numero_frota)
 
     #4 - salva o objeto
-    novo_veiculo = Veiculo(proximo_numero, placa, marca, modelo, km)
+    novo_veiculo = Veiculo(proximo_numero, placa, marca, modelo, km, combustiveis)
   
     adicionar_veiculo(veiculos, novo_veiculo)
 

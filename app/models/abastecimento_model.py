@@ -14,19 +14,17 @@ class Abastecimento:
         
 def validar_combustivel(combustivel):
 
-    combustiveis_validos = {
+    combustiveis_validos = [
         "Gasolina",
         "Etanol",
         "DIESEL S10",
-        "DIESEL S500",
-    }
+        "DIESEL S500"
+    ]
 
-    combustivel_normalizado = combustivel.strip().lower()
-
-    if combustivel_normalizado not in combustiveis_validos:
+    if combustivel not in combustiveis_validos:
         return False, "Combustível inválido"
 
-    return True, combustiveis_validos[combustivel_normalizado]
+    return True, combustivel
         
         
         
