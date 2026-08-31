@@ -118,7 +118,21 @@ def atualizar_custo_por_km_banco(abastecimento_id, custo_por_km):
     conexao.close()
 
 
+def abastecimentos_por_veiculo_banco(veiculo_id):
+    conexao = conectar()
+    cursor = conexao.cursor()
 
+    cursor.execute("""
+        SELECT * FROM abastecimentos
+        WHERE veiculo_id = ?
+        ORDER BY id
+    """, (veiculo_id,))
+
+    abastecimentos = cursor.fetchall()
+
+    conexao.close()
+
+    return abastecimentos
 
 
 

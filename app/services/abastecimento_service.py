@@ -1,11 +1,9 @@
 from app.models.abastecimento_model import (Abastecimento, validar_combustivel)
 from app.repositories.abastecimento_repository import (adicionar_abastecimento_banco, buscar_ultimo_abastecimento_banco,
-abastecimento_por_veiculo,atualizar_custo_por_km_banco)
-from app.services.veiculo_service import (buscar_placa_banco, atualizar_km_banco)
+atualizar_custo_por_km_banco, abastecimentos_por_veiculo_banco)
+from app.repositories.veiculo_repository import (buscar_placa_banco, atualizar_km_banco)
 
 
-
-    
 def validar_valor_litro(valor_litro):
     if valor_litro <= 0:
         return False, "Valor litro invalido"
@@ -72,18 +70,20 @@ def cadastrar_abastecimento(placa,data,km,combustivel,valor_litro,quantidade_lit
 
     return "Abastecimento cadastrado com sucesso"
 
-def historico_abastecimento_veiculo(veiculos, abastecimentos, placa):
-    
-    veiculo_encontrado = buscar_placa(veiculos, placa)
-    
+
+def historico_abastecimento_veiculo(placa):
+    veiculo_encontrado = buscar_placa_banco(placa)
+
     if not veiculo_encontrado:
-        return "Veiculo não encontrado"
-    
-    historico = abastecimento_por_veiculo(abastecimentos, veiculo_encontrado)
-    
+        return "Veículo não encontrado"
+
+    veiculo_id = veiculo_encontrado[0]
+
+    historico = abastecimentos_por_veiculo_banco(veiculo_id)
+
     if not historico:
-        return "Nenhum abastecimento Registrado"
-    
+        return "Nenhum abastecimento registrado"
+
     return historico
    
 
@@ -94,8 +94,8 @@ def calcular_media_consumo_geral(historico):
 
     for abastecimento in historico:
         
-        if  abastecimento.media_consumo is not None:
-            soma_medias += abastecimento.media_consumo 
+        if  abastecimento[8] is not None:
+            soma_medias += abastecimento[8]
             quantidade_medias += 1
             
     if quantidade_medias == 0:
@@ -109,7 +109,7 @@ def calcular_total_gasto(historico):
     total  = 0
     
     for abastecimento in historico:
-        total = total + abastecimento.valor_total
+        total = total + abastecimento[7]
         
     return total
     
@@ -120,7 +120,7 @@ def calcular_total_litros(historico):
     
     
     for abastecimento in historico:
-        total = total + abastecimento.quantidade_litro
+        total = total + abastecimento[6]
         
     return total
     
@@ -135,8 +135,8 @@ def calcular_distancia_historico(historico):
     if len(historico) < 2:
         return None
     
-    inicial_km = historico[0].km
-    ultimo_km =  historico[-1].km
+    inicial_km = historico[0][3]
+    ultimo_km =  historico[-1][3]
  
     distancia_percorrida = ultimo_km - inicial_km
     
@@ -150,8 +150,8 @@ def calcular_media_custo_por_km(historico):
 
     for abastecimento in historico:
 
-        if abastecimento.custo_por_km is not None:
-            soma_custos += abastecimento.custo_por_km
+        if abastecimento[9] is not None:
+            soma_custos += abastecimento[9]
             quantidade += 1
             
     if quantidade == 0 :
@@ -179,15 +179,15 @@ def gerar_resumo_abastecimento(historico):
     }
     
     
-def resumo_abastecimento_veiculo(veiculos, abastecimentos, placa):
-    
-    historico = historico_abastecimento_veiculo(veiculos, abastecimentos, placa)    
-    if isinstance (historico, str):
+def resumo_abastecimento_veiculo(placa):
+
+    historico = historico_abastecimento_veiculo(placa)
+
+    if isinstance(historico, str):
         return historico
-    
+
     return gerar_resumo_abastecimento(historico)
-        
-        
+
 
 
       

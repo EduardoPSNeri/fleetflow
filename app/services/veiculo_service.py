@@ -1,7 +1,6 @@
 from app.models.veiculo_model import Veiculo
-from app.repositories.veiculo_repository import (
-    buscar_placa_banco, adicionar_veiculo_banco, buscar_ultimo_numero_frota_banco, atualizar_km_banco,
-    atualizar_status_veiculo_banco)
+from app.repositories.veiculo_repository import (buscar_placa_banco, adicionar_veiculo_banco, 
+buscar_ultimo_numero_frota_banco, atualizar_km_banco, atualizar_status_veiculo_banco)
 
 ## validações 
 
