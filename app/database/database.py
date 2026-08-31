@@ -34,48 +34,6 @@ def criar_tabela_veiculos():
 #encerra a conexão.
     conexao.close()
     
-    
-def adicionar_veiculo_banco(numero_frota, placa, marca, modelo, km, ativo):
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute("""
-        INSERT INTO veiculos (
-            numero_frota,
-            placa,
-            marca,
-            modelo,
-            km,
-            ativo
-        )
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (
-        numero_frota,
-        placa,
-        marca,
-        modelo,
-        km,
-        ativo
-    ))
-
-    conexao.commit()
-    conexao.close()
-    
-
-def listar_veiculos_banco():
-    conexao = conectar()
-    cursor = conexao.cursor()
-
-    cursor.execute("""
-        SELECT * FROM veiculos
-    """)
-
-    veiculos = cursor.fetchall()
-
-    conexao.close()
-
-    return veiculos
-
 
 def criar_tabela_abastecimentos():
     conexao = conectar()

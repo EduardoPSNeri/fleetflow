@@ -1,4 +1,4 @@
-from app.models.abastecimento_model import (Abastecimento, validar_combustivel)
+from app.models.abastecimento_model import validar_combustivel
 from app.repositories.abastecimento_repository import (adicionar_abastecimento_banco, buscar_ultimo_abastecimento_banco,
 atualizar_custo_por_km_banco, abastecimentos_por_veiculo_banco)
 from app.repositories.veiculo_repository import (buscar_placa_banco, atualizar_km_banco)
@@ -29,6 +29,15 @@ def cadastrar_abastecimento(placa,data,km,combustivel,valor_litro,quantidade_lit
     if km <= km_atual:
         return "KM de abastecimento inválido"
 
+    valor_valido, mensagem = validar_valor_litro(valor_litro)
+
+    if not valor_valido:
+        return mensagem
+
+    quantidade_valida, mensagem = validar_quantidade_litro(quantidade_litro)
+
+    if not quantidade_valida:
+        return mensagem
     combustivel_valido, mensagem = validar_combustivel(combustivel)
 
     if not combustivel_valido:
