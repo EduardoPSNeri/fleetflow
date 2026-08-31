@@ -1,6 +1,7 @@
 from app.models.abastecimento_model import (Abastecimento, validar_combustivel)
-from app.repositories.abastecimento_repository import (adicionar_abastecimento, buscar_ultimo_abastecimento, abastecimento_por_veiculo)
-from app.services.veiculo_service import (buscar_placa)
+from app.repositories.abastecimento_repository import (adicionar_abastecimento_banco, buscar_ultimo_abastecimento_banco,
+abastecimento_por_veiculo,atualizar_custo_por_km_banco)
+from app.services.veiculo_service import (buscar_placa_banco, atualizar_km_banco)
 
 
 
@@ -17,57 +18,59 @@ def validar_quantidade_litro(quantidade_litro):
     return True, "Quantidade de Litros valida"
 
 
-def cadastrar_abastecimento(abastecimentos,veiculos,placa,data,km,combustivel,valor_litro,quantidade_litro):
+def cadastrar_abastecimento(placa,data,km,combustivel,valor_litro,quantidade_litro):
 
-    veiculo_encontrado = buscar_placa(veiculos, placa)
-    
+    veiculo_encontrado = buscar_placa_banco(placa)
+
     if not veiculo_encontrado:
-        return "Veiculo não encontrado"
-    
-    valor_litro_valido, mensagem = validar_valor_litro(valor_litro)
-    
-    if not valor_litro_valido:
-        return mensagem
-    
-    quantidade_litro_valida, mensagem = validar_quantidade_litro(quantidade_litro)
-    
-    if not quantidade_litro_valida:
-        return mensagem
-    
-    if km <= veiculo_encontrado.km:
-        return "km de abastecimento Invalido"
-    
-    combustivel_valido, combustivel_padronizado = validar_combustivel(combustivel)
+        return "Veículo não encontrado"
+
+    veiculo_id = veiculo_encontrado[0]
+    km_atual = veiculo_encontrado[5]
+
+    if km <= km_atual:
+        return "KM de abastecimento inválido"
+
+    combustivel_valido, mensagem = validar_combustivel(combustivel)
 
     if not combustivel_valido:
-        return combustivel_padronizado
+        return mensagem
 
-    combustivel = combustivel_padronizado
-        
-    
-    ultimo_abastecimento = buscar_ultimo_abastecimento(abastecimentos,veiculo_encontrado)
+    valor_total = valor_litro * quantidade_litro
 
-    if ultimo_abastecimento is None:
-        media_consumo = None
-    else:
-        distancia_percorrida = km - ultimo_abastecimento.km
+    ultimo_abastecimento = buscar_ultimo_abastecimento_banco(veiculo_id)
+
+    media_consumo = None
+
+    if ultimo_abastecimento is not None:
+        ultimo_abastecimento_id = ultimo_abastecimento[0]
+        ultimo_km = ultimo_abastecimento[3]
+        ultimo_valor_total = ultimo_abastecimento[7]
+
+        distancia_percorrida = km - ultimo_km
+
         media_consumo = distancia_percorrida / quantidade_litro
-        custo_por_km_anterior = (ultimo_abastecimento.valor_total / distancia_percorrida)
-
-        ultimo_abastecimento.custo_por_km = custo_por_km_anterior
         
+        custo_por_km = ultimo_valor_total / distancia_percorrida
+        
+        atualizar_custo_por_km_banco(ultimo_abastecimento_id,custo_por_km)
         
 
-    novo_abastecimento = Abastecimento(data,veiculo_encontrado,km,combustivel,valor_litro,quantidade_litro)
+    adicionar_abastecimento_banco(
+        veiculo_id,
+        data,
+        km,
+        combustivel,
+        valor_litro,
+        quantidade_litro,
+        valor_total,
+        media_consumo,
+        None
+    )
 
-    novo_abastecimento.media_consumo = media_consumo
-
-    adicionar_abastecimento(abastecimentos, novo_abastecimento)
-
-    veiculo_encontrado.atualizar_km(km)
+    atualizar_km_banco(placa, km)
 
     return "Abastecimento cadastrado com sucesso"
-
 
 def historico_abastecimento_veiculo(veiculos, abastecimentos, placa):
     

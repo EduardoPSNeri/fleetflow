@@ -1,23 +1,44 @@
-from app.services.motorista_service import (
-    cadastro_motorista,
-    inativar_motorista,
-    ativar_motorista
+from app.repositories.veiculo_repository import buscar_placa_banco
+from app.repositories.abastecimento_repository import adicionar_abastecimento_banco
+
+"""veiculo = buscar_placa_banco("GHI-7890")
+
+print(veiculo)
+
+veiculo_id = veiculo[0]
+
+adicionar_abastecimento_banco(
+    veiculo_id,
+    "31/08/2026",
+    98000,
+    "Gasolina",
+    6.00,
+    50,
+    300.00,
+    None,
+    None
 )
 
-motoristas = []
+print("Abastecimento salvo com sucesso")
 
-print(
-    cadastro_motorista(
-        motoristas,
-        "João Silva",
-        "12345678900",
-        "123456789",
-        "B"
-    )
+veiculo_id = veiculo[0]
+
+adicionar_abastecimento_banco(
+    veiculo_id,
+    "31/08/2026",
+    100000,
+    "Gasolina",
+    6.00,
+    50,
+    300.00,
+    None,
+    None
 )
 
-print(inativar_motorista(motoristas, "12345678900"))
-print(inativar_motorista(motoristas, "12345678900"))
+print("Abastecimento salvo com sucesso")"""
 
-print(ativar_motorista(motoristas, "12345678900"))
-print(ativar_motorista(motoristas, "12345678900"))
+from app.repositories.abastecimento_repository import listar_abastecimentos_banco
+
+abastecimentos = listar_abastecimentos_banco()
+
+print(abastecimentos)

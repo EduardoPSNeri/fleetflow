@@ -1,6 +1,7 @@
 from app.models.veiculo_model import Veiculo
 from app.repositories.veiculo_repository import (
-    buscar_placa, buscar_ultimo_numero_frota, adicionar_veiculo)
+    buscar_placa_banco, adicionar_veiculo_banco, buscar_ultimo_numero_frota_banco, atualizar_km_banco,
+    atualizar_status_veiculo_banco)
 
 ## validações 
 
@@ -55,7 +56,7 @@ def validar_km(km):
 
 ## açoes - cadastro, atualizaçoes
 
-def cadastrar_veiculo(veiculos, placa, marca, modelo, km, combustiveis):
+def cadastrar_veiculo(placa, marca, modelo, km, combustiveis):
     
     placa = placa.upper()
     
@@ -71,42 +72,77 @@ def cadastrar_veiculo(veiculos, placa, marca, modelo, km, combustiveis):
     if not km_valido:
         return mensagem
     
-    #2 - Consulta o Repository
-    veiculo_existente = buscar_placa(veiculos, placa)
+
+    veiculo_existente = buscar_placa_banco(placa)
 
     if veiculo_existente is not None:
         return "Veículo já cadastrado"
     
-    #3 - Gera o numero da frota 
-    ultimo_numero_frota = buscar_ultimo_numero_frota(veiculos)
+
+    ultimo_numero_frota = buscar_ultimo_numero_frota_banco()
     proximo_numero = gerar_numero_frota(ultimo_numero_frota)
 
-    #4 - salva o objeto
+    
     novo_veiculo = Veiculo(proximo_numero, placa, marca, modelo, km, combustiveis)
-  
-    adicionar_veiculo(veiculos, novo_veiculo)
-
+    
+    adicionar_veiculo_banco(
+        novo_veiculo.numero_frota,
+        novo_veiculo.placa,
+        novo_veiculo.marca,
+        novo_veiculo.modelo,
+        novo_veiculo.km,
+        novo_veiculo.ativo
+    )
     return "Veículo cadastrado com sucesso"
 
 
-def inativar_veiculo(veiculos, placa):
-    veiculo_encontrado = buscar_placa(veiculos, placa)
-    if not veiculo_encontrado:
-        return "Veiculo não encontrado"
+def inativar_veiculo(placa):
+    veiculo_encontrado = buscar_placa_banco(placa)
 
-    return veiculo_encontrado.inativar()
-
-    
-def ativar_veiculo(veiculos, placa):
-    veiculo_informado = buscar_placa(veiculos, placa)
-    if not veiculo_informado:
-        return "veiculo nao encontrado"
-    
-    return veiculo_informado.ativar()
-    
-    
-def atualizar_km_veiculo (veiculos, placa, novo_km):
-    veiculo_encontrado = buscar_placa(veiculos, placa)
     if not veiculo_encontrado:
-        return "Veiculo não encontrado"
-    return veiculo_encontrado.atualizar_km(novo_km)
+        return "Veículo não encontrado"
+
+    ativo = veiculo_encontrado[6]
+
+    if not ativo:
+        return "O veículo já está inativo."
+
+    atualizar_status_veiculo_banco(placa, False)
+
+    return "Veículo inativado com sucesso"
+
+
+def ativar_veiculo(placa):
+    veiculo_encontrado = buscar_placa_banco(placa)
+
+    if not veiculo_encontrado:
+        return "Veículo não encontrado"
+
+    ativo = veiculo_encontrado[6]
+
+    if ativo:
+        return "O veículo já está ativo."
+
+    atualizar_status_veiculo_banco(placa, True)
+
+    return "Veículo ativado com sucesso" 
+    
+    
+def atualizar_km_veiculo(placa, novo_km):
+    veiculo_encontrado = buscar_placa_banco(placa)
+
+    if not veiculo_encontrado:
+        return "Veículo não encontrado"
+
+    km_atual = veiculo_encontrado[5]
+
+    if novo_km <= km_atual:
+        return "KM inválido"
+
+    atualizar_km_banco(placa, novo_km)
+
+    return "KM atualizado com sucesso"
+
+
+
+
