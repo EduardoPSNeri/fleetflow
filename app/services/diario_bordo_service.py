@@ -1,4 +1,5 @@
-from app.repositories.diario_bordo_repository import (adicionar_saida_banco,buscar_diario_aberto_banco,finalizar_diario_banco)
+from app.repositories.diario_bordo_repository import (adicionar_saida_banco,buscar_diario_aberto_banco,
+    buscar_diario_aberto_motorista_banco,finalizar_diario_banco)
 from app.repositories.veiculo_repository import (buscar_placa_banco,atualizar_km_banco)
 from app.repositories.motorista_repository import (buscar_cpf_banco)
 
@@ -27,6 +28,13 @@ def registrar_saida(
 
     if diario_aberto:
         return "Veículo já possui uma saída em aberto"
+
+    diario_motorista_aberto = buscar_diario_aberto_motorista_banco(
+        motorista_id
+    )
+
+    if diario_motorista_aberto:
+        return "Motorista já possui uma saída em aberto"
 
     km_atual = veiculo[5]
 

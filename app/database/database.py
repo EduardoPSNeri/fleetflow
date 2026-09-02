@@ -99,7 +99,24 @@ def criar_tabela_diario_bordo():
 
 
 
+def criar_tabela_manutencoes():
+    conexao = conectar()
+    cursor = conexao.cursor()
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS manutencoes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            veiculo_id INTEGER,
+            tipo TEXT,
+            descricao TEXT,
+            data TEXT,
+            km REAL,
+            valor REAL
+        )
+    """)
+
+    conexao.commit()
+    conexao.close()
 
 
 

@@ -92,3 +92,25 @@ def listar_diarios_banco():
     conexao.close()
 
     return diarios
+
+
+def buscar_diario_aberto_motorista_banco(motorista_id):
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        SELECT * FROM diario_bordo
+        WHERE motorista_id = ?
+        AND hora_chegada IS NULL
+        ORDER BY id DESC
+        LIMIT 1
+    """, (motorista_id,))
+
+    diario = cursor.fetchone()
+
+    conexao.close()
+
+    return diario
+
+
+
