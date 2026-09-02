@@ -1,8 +1,6 @@
 from app.models.motorista_model import Motorista
 from app.repositories.motorista_repository import (
-    adicionar_motorista_banco,
-    buscar_cpf_banco,
-    atualizar_status_motorista_banco
+    adicionar_motorista_banco, buscar_cpf_banco, atualizar_status_motorista_banco, listar_motoristas_banco
 )
 
 
@@ -63,3 +61,23 @@ def ativar_motorista(cpf):
     atualizar_status_motorista_banco(cpf, True)
 
     return "Motorista ativado com sucesso"
+
+
+def listar_motoristas():
+    return listar_motoristas_banco()
+
+
+def buscar_motorista(cpf):
+    motorista = buscar_cpf_banco(cpf)
+
+    if not motorista:
+        return "Motorista não encontrado"
+
+    return motorista
+
+
+
+
+
+
+

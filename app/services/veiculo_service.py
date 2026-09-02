@@ -1,6 +1,6 @@
 from app.models.veiculo_model import Veiculo
 from app.repositories.veiculo_repository import (buscar_placa_banco, adicionar_veiculo_banco, 
-buscar_ultimo_numero_frota_banco, atualizar_km_banco, atualizar_status_veiculo_banco)
+buscar_ultimo_numero_frota_banco, atualizar_km_banco, atualizar_status_veiculo_banco, listar_veiculos_banco)
 
 ## validações 
 
@@ -9,6 +9,15 @@ def gerar_numero_frota(ultimo_numero_frota):
         return 1
 
     return ultimo_numero_frota + 1
+
+
+def buscar_veiculo(placa):
+    veiculo = buscar_placa_banco(placa.upper())
+
+    if not veiculo:
+        return "Veículo não encontrado"
+
+    return veiculo
 
 
 def validar_placa_antiga(placa):
@@ -143,5 +152,6 @@ def atualizar_km_veiculo(placa, novo_km):
     return "KM atualizado com sucesso"
 
 
-
+def listar_veiculos():
+    return listar_veiculos_banco()
 

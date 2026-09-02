@@ -1,31 +1,60 @@
-import select
-from typing_extensions import Annotated
-from fastapi import APIRouter, HTTPException, Query
-from app.models.veiculo_model import Veiculo_table
-from app.schemas.veiculo_schema import *
-from app.services.veiculo_service import SessionDep
+from fastapi import APIRouter
+
+from app.services.veiculo_service import (
+    listar_veiculos, cadastrar_veiculo, buscar_veiculo, ativar_veiculo, inativar_veiculo, atualizar_km_veiculo, 
+)
+
+from app.schemas.veiculo_schema import VeiculoCreate
+
 
 router = APIRouter(
     prefix="/veiculos",
-    tags=["veiculos"]
+    tags=["Veículos"]
 )
 
 
 @router.get("/")
-def list_veiculos():
-    return {"message": "Veiculo deleted successfully"}
+def listar():
+    return listar_veiculos()
+
+
+@router.get("/{placa}")
+def buscar(placa: str):
+    return buscar_veiculo(placa)
+
+
+@router.post("/")
+def cadastrar(veiculo: VeiculoCreate):
+    return cadastrar_veiculo(
+        veiculo.placa,
+        veiculo.marca,
+        veiculo.modelo,
+        veiculo.km,
+        veiculo.combustiveis
+    )
     
+    
+@router.patch("/{placa}/inativar")
+def inativar(placa: str):
+    return inativar_veiculo(placa.upper())
 
 
-@router.get("/")
-def create_veiculo():
-    return {"message": "Veiculo deleted successfully"}
-
-@router.put("/")
-def update_veiculo():
-    return {"message": "Veiculo deleted successfully"}
-
-
-@router.delete("/")
-def delete_veiculo():
-    return {"message": "Veiculo deleted successfully"}
+@router.patch("/{placa}/ativar")
+def ativar(placa: str):
+    return ativar_veiculo(placa.upper())    
+    
+    
+@router.patch("/{placa}/km/{novo_km}")
+def atualizar_km(placa: str, novo_km: float):
+    return atualizar_km_veiculo(
+        placa.upper(),
+        novo_km
+    )    
+    
+    
+    
+    
+    
+    
+    
+    

@@ -1,5 +1,5 @@
 from app.repositories.diario_bordo_repository import (adicionar_saida_banco,buscar_diario_aberto_banco,
-    buscar_diario_aberto_motorista_banco,finalizar_diario_banco)
+    buscar_diario_aberto_motorista_banco,finalizar_diario_banco, listar_diarios_banco)
 from app.repositories.veiculo_repository import (buscar_placa_banco,atualizar_km_banco)
 from app.repositories.motorista_repository import (buscar_cpf_banco)
 
@@ -87,3 +87,9 @@ def registrar_chegada(
     )
 
     return "Chegada registrada com sucesso"
+
+
+def listar_diarios():
+    return listar_diarios_banco()
+
+

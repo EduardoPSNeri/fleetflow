@@ -1,7 +1,7 @@
 from app.models.abastecimento_model import validar_combustivel
 from app.repositories.abastecimento_repository import (adicionar_abastecimento_banco, buscar_ultimo_abastecimento_banco,
-atualizar_custo_por_km_banco, abastecimentos_por_veiculo_banco)
-from app.repositories.veiculo_repository import (buscar_placa_banco, atualizar_km_banco)
+atualizar_custo_por_km_banco, abastecimentos_por_veiculo_banco, listar_abastecimentos_banco)
+from app.repositories.veiculo_repository import (buscar_placa_banco, atualizar_km_banco,)
 
 
 def validar_valor_litro(valor_litro):
@@ -198,7 +198,8 @@ def resumo_abastecimento_veiculo(placa):
     return gerar_resumo_abastecimento(historico)
 
 
-
+def listar_abastecimentos():
+    return listar_abastecimentos_banco()
       
       
         

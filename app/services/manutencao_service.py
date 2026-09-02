@@ -1,8 +1,5 @@
 from app.repositories.manutencao_repository import (
-    adicionar_manutencao_banco,
-    manutencoes_por_veiculo_banco
-)
-
+    adicionar_manutencao_banco, manutencoes_por_veiculo_banco, listar_manutencoes_banco)
 from app.repositories.veiculo_repository import (
     buscar_placa_banco
 )
@@ -87,6 +84,7 @@ def historico_manutencoes_veiculo(placa):
     return historico
 
 
-
+def listar_manutencoes():
+    return listar_manutencoes_banco()
 
 
