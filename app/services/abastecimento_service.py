@@ -81,19 +81,35 @@ def cadastrar_abastecimento(placa,data,km,combustivel,valor_litro,quantidade_lit
 
 
 def historico_abastecimento_veiculo(placa):
-    veiculo_encontrado = buscar_placa_banco(placa)
+    veiculo = buscar_placa_banco(placa)
 
-    if not veiculo_encontrado:
+    if not veiculo:
         return "Veículo não encontrado"
 
-    veiculo_id = veiculo_encontrado[0]
+    veiculo_id = veiculo[0]
 
     historico = abastecimentos_por_veiculo_banco(veiculo_id)
 
     if not historico:
-        return "Nenhum abastecimento registrado"
+        return []
 
-    return historico
+    resultado = []
+
+    for abastecimento in historico:
+        resultado.append({
+            "id": abastecimento[0],
+            "veiculo_id": abastecimento[1],
+            "data": abastecimento[2],
+            "km": abastecimento[3],
+            "combustivel": abastecimento[4],
+            "valor_litro": abastecimento[5],
+            "quantidade_litro": abastecimento[6],
+            "valor_total": abastecimento[7],
+            "media_consumo": abastecimento[8],
+            "custo_por_km": abastecimento[9]
+        })
+
+    return resultado
    
 
 def calcular_media_consumo_geral(historico):
@@ -199,7 +215,24 @@ def resumo_abastecimento_veiculo(placa):
 
 
 def listar_abastecimentos():
-    return listar_abastecimentos_banco()
-      
+    abastecimentos = listar_abastecimentos_banco()
+
+    resultado = []
+
+    for abastecimento in abastecimentos:
+        resultado.append({
+            "id": abastecimento[0],
+            "veiculo_id": abastecimento[1],
+            "data": abastecimento[2],
+            "km": abastecimento[3],
+            "combustivel": abastecimento[4],
+            "valor_litro": abastecimento[5],
+            "quantidade_litro": abastecimento[6],
+            "valor_total": abastecimento[7],
+            "media_consumo": abastecimento[8],
+            "custo_por_km": abastecimento[9]
+        })
+
+    return resultado      
       
         

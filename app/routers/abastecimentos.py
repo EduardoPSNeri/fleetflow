@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.schemas.abastecimento_schema import AbastecimentoCreate
+from app.schemas.abastecimento_schema import (AbastecimentoCreate, AbastecimentoResponse)
 from app.services.abastecimento_service import (
     cadastrar_abastecimento, listar_abastecimentos, historico_abastecimento_veiculo, resumo_abastecimento_veiculo, 
 )
@@ -12,7 +12,7 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("/", response_model=list[AbastecimentoResponse])
 def listar():
     return listar_abastecimentos()
 
@@ -29,11 +29,14 @@ def cadastrar(abastecimento: AbastecimentoCreate):
     )
     
     
-@router.get("/{placa}/historico")
+@router.get(
+    "/{placa}/historico",
+    response_model=list[AbastecimentoResponse]
+)
 def historico(placa: str):
     return historico_abastecimento_veiculo(
-    placa.upper()
-)
+        placa.upper()
+    )
 
 
 @router.get("/{placa}/resumo")

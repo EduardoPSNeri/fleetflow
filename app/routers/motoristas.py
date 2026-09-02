@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from app.schemas.motorista_schema import MotoristaCreate
+from app.schemas.motorista_schema import (MotoristaCreate, MotoristaResponse)
 from app.services.motorista_service import (
-    cadastro_motorista, listar_motoristas, buscar_motorista, ativar_motorista, inativar_motorista
+    cadastro_motorista, listar_motoristas, buscar_motorista, ativar_motorista, inativar_motorista,
 )
 
 
@@ -12,9 +12,14 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("/", response_model=list[MotoristaResponse])
 def listar():
     return listar_motoristas()
+
+
+@router.get("/{cpf}", response_model=MotoristaResponse)
+def buscar(cpf: str):
+    return buscar_motorista(cpf)
 
 
 @router.post("/")
@@ -27,11 +32,6 @@ def cadastrar(motorista: MotoristaCreate):
     )
     
     
-@router.get("/{cpf}")
-def buscar(cpf: str):
-    return buscar_motorista(cpf)
-
-
 @router.patch("/{cpf}/inativar")
 def inativar(cpf: str):
     return inativar_motorista(cpf)

@@ -79,12 +79,41 @@ def historico_manutencoes_veiculo(placa):
     )
 
     if not historico:
-        return "Nenhuma manutenção registrada"
+        return []
 
-    return historico
+    resultado = []
+
+    for manutencao in historico:
+        resultado.append({
+            "id": manutencao[0],
+            "veiculo_id": manutencao[1],
+            "tipo": manutencao[2],
+            "descricao": manutencao[3],
+            "data": manutencao[4],
+            "km": manutencao[5],
+            "valor": manutencao[6]
+        })
+
+    return resultado
 
 
 def listar_manutencoes():
-    return listar_manutencoes_banco()
+    manutencoes = listar_manutencoes_banco()
+
+    resultado = []
+
+    for manutencao in manutencoes:
+        resultado.append({
+            "id": manutencao[0],
+            "veiculo_id": manutencao[1],
+            "tipo": manutencao[2],
+            "descricao": manutencao[3],
+            "data": manutencao[4],
+            "km": manutencao[5],
+            "valor": manutencao[6]
+        })
+
+    return resultado
+
 
 

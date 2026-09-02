@@ -1,9 +1,7 @@
 from fastapi import APIRouter
 
 from app.schemas.diario_bordo_schema import (
-    SaidaCreate,
-    ChegadaCreate
-)
+    SaidaCreate, ChegadaCreate, DiarioBordoResponse)
 
 from app.services.diario_bordo_service import (
     registrar_saida,
@@ -18,7 +16,7 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("/", response_model=list[DiarioBordoResponse])
 def listar():
     return listar_diarios()
 

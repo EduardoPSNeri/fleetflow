@@ -1,11 +1,8 @@
 from fastapi import APIRouter
 
-from app.schemas.manutencao_schema import ManutencaoCreate
+from app.schemas.manutencao_schema import (ManutencaoCreate, ManutencaoResponse)
 from app.services.manutencao_service import (
-    cadastrar_manutencao,
-    listar_manutencoes,
-    historico_manutencoes_veiculo
-)
+    cadastrar_manutencao, listar_manutencoes, historico_manutencoes_veiculo)
 
 
 router = APIRouter(

@@ -90,6 +90,25 @@ def registrar_chegada(
 
 
 def listar_diarios():
-    return listar_diarios_banco()
+    diarios = listar_diarios_banco()
+
+    resultado = []
+
+    for diario in diarios:
+        resultado.append({
+            "id": diario[0],
+            "veiculo_id": diario[1],
+            "motorista_id": diario[2],
+            "data": diario[3],
+            "hora_saida": diario[4],
+            "km_saida": diario[5],
+            "hora_chegada": diario[6],
+            "km_chegada": diario[7]
+        })
+
+    return resultado
+
+
+
 
 

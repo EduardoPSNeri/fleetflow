@@ -64,7 +64,21 @@ def ativar_motorista(cpf):
 
 
 def listar_motoristas():
-    return listar_motoristas_banco()
+    motoristas = listar_motoristas_banco()
+
+    resultado = []
+
+    for motorista in motoristas:
+        resultado.append({
+            "id": motorista[0],
+            "nome": motorista[1],
+            "cpf": motorista[2],
+            "cnh": motorista[3],
+            "categoria_cnh": motorista[4],
+            "ativo": bool(motorista[5])
+        })
+
+    return resultado
 
 
 def buscar_motorista(cpf):
@@ -73,10 +87,14 @@ def buscar_motorista(cpf):
     if not motorista:
         return "Motorista não encontrado"
 
-    return motorista
-
-
-
+    return {
+        "id": motorista[0],
+        "nome": motorista[1],
+        "cpf": motorista[2],
+        "cnh": motorista[3],
+        "categoria_cnh": motorista[4],
+        "ativo": bool(motorista[5])
+    }
 
 
 

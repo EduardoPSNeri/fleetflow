@@ -4,7 +4,7 @@ from app.services.veiculo_service import (
     listar_veiculos, cadastrar_veiculo, buscar_veiculo, ativar_veiculo, inativar_veiculo, atualizar_km_veiculo, 
 )
 
-from app.schemas.veiculo_schema import VeiculoCreate
+from app.schemas.veiculo_schema import (VeiculoCreate, VeiculoResponse)
 
 
 router = APIRouter(
@@ -13,12 +13,12 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get("/", response_model=list[VeiculoResponse])
 def listar():
     return listar_veiculos()
 
 
-@router.get("/{placa}")
+@router.get("/{placa}", response_model=VeiculoResponse)
 def buscar(placa: str):
     return buscar_veiculo(placa)
 

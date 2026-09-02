@@ -17,7 +17,15 @@ def buscar_veiculo(placa):
     if not veiculo:
         return "Veículo não encontrado"
 
-    return veiculo
+    return {
+        "id": veiculo[0],
+        "numero_frota": veiculo[1],
+        "placa": veiculo[2],
+        "marca": veiculo[3],
+        "modelo": veiculo[4],
+        "km": veiculo[5],
+        "ativo": bool(veiculo[6])
+    }
 
 
 def validar_placa_antiga(placa):
@@ -153,5 +161,23 @@ def atualizar_km_veiculo(placa, novo_km):
 
 
 def listar_veiculos():
-    return listar_veiculos_banco()
+    veiculos = listar_veiculos_banco()
+
+    resultado = []
+
+    for veiculo in veiculos:
+        resultado.append({
+            "id": veiculo[0],
+            "numero_frota": veiculo[1],
+            "placa": veiculo[2],
+            "marca": veiculo[3],
+            "modelo": veiculo[4],
+            "km": veiculo[5],
+            "ativo": bool(veiculo[6])
+        })
+
+    return resultado
+
+
+
 
