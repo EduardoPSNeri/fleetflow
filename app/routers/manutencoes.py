@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.schemas.manutencao_schema import (ManutencaoCreate, ManutencaoResponse)
 from app.services.manutencao_service import (
@@ -16,9 +16,9 @@ def listar():
     return listar_manutencoes()
 
 
-@router.post("/")
+@router.post("/", status_code=201)
 def cadastrar(manutencao: ManutencaoCreate):
-    return cadastrar_manutencao(
+    resultado = cadastrar_manutencao(
         manutencao.placa.upper(),
         manutencao.tipo,
         manutencao.descricao,
@@ -26,6 +26,24 @@ def cadastrar(manutencao: ManutencaoCreate):
         manutencao.km,
         manutencao.valor
     )
+
+    if resultado == "Veículo não encontrado":
+        raise HTTPException(
+            status_code=404,
+            detail=resultado
+        )
+
+    if resultado in [
+        "Tipo de manutenção inválido",
+        "Valor de manutenção inválido",
+        "KM da manutenção inválido"
+    ]:
+        raise HTTPException(
+            status_code=400,
+            detail=resultado
+        )
+
+    return {"message": resultado}
 
 
 @router.get("/{placa}/historico")

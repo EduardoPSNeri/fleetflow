@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.schemas.diario_bordo_schema import (
     SaidaCreate, ChegadaCreate, DiarioBordoResponse)
@@ -21,9 +21,9 @@ def listar():
     return listar_diarios()
 
 
-@router.post("/saida")
+@router.post("/saida", status_code=201)
 def saida(dados: SaidaCreate):
-    return registrar_saida(
+    resultado = registrar_saida(
         dados.placa.upper(),
         dados.cpf,
         dados.data,
@@ -31,15 +31,52 @@ def saida(dados: SaidaCreate):
         dados.km_saida
     )
 
+    if resultado in [
+        "Veículo não encontrado",
+        "Motorista não encontrado"
+    ]:
+        raise HTTPException(
+            status_code=404,
+            detail=resultado
+        )
+
+    if resultado in [
+        "Veículo já possui uma saída em aberto",
+        "Motorista já possui uma saída em aberto",
+        "KM de saída inválido"
+    ]:
+        raise HTTPException(
+            status_code=400,
+            detail=resultado
+        )
+
+    return {"message": resultado}
+
 
 @router.patch("/chegada")
 def chegada(dados: ChegadaCreate):
-    return registrar_chegada(
+    resultado = registrar_chegada(
         dados.placa.upper(),
         dados.hora_chegada,
         dados.km_chegada
     )
-    
+
+    if resultado == "Veículo não encontrado":
+        raise HTTPException(
+            status_code=404,
+            detail=resultado
+        )
+
+    if resultado in [
+        "Nenhuma saída em aberto para este veículo",
+        "KM de chegada inválido"
+    ]:
+        raise HTTPException(
+            status_code=400,
+            detail=resultado
+        )
+
+    return {"message": resultado} 
     
     
     

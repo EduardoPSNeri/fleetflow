@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.schemas.abastecimento_schema import (AbastecimentoCreate, AbastecimentoResponse)
 from app.services.abastecimento_service import (
@@ -17,9 +17,9 @@ def listar():
     return listar_abastecimentos()
 
 
-@router.post("/")
+@router.post("/", status_code=201)
 def cadastrar(abastecimento: AbastecimentoCreate):
-    return cadastrar_abastecimento(
+    resultado = cadastrar_abastecimento(
         abastecimento.placa,
         abastecimento.data,
         abastecimento.km,
@@ -27,6 +27,25 @@ def cadastrar(abastecimento: AbastecimentoCreate):
         abastecimento.valor_litro,
         abastecimento.quantidade_litro
     )
+
+    if resultado == "Veículo não encontrado":
+        raise HTTPException(
+            status_code=404,
+            detail=resultado
+        )
+
+    if resultado in [
+        "KM de abastecimento inválido",
+        "Valor do litro inválido",
+        "Quantidade de litros inválida",
+        "Combustível inválido"
+    ]:
+        raise HTTPException(
+            status_code=400,
+            detail=resultado
+        )
+
+    return {"message": resultado}   
     
     
 @router.get(
@@ -34,17 +53,32 @@ def cadastrar(abastecimento: AbastecimentoCreate):
     response_model=list[AbastecimentoResponse]
 )
 def historico(placa: str):
-    return historico_abastecimento_veiculo(
+    resultado = historico_abastecimento_veiculo(
         placa.upper()
     )
+
+    if resultado == "Veículo não encontrado":
+        raise HTTPException(
+            status_code=404,
+            detail=resultado
+        )
+
+    return resultado
 
 
 @router.get("/{placa}/resumo")
 def resumo(placa: str):
-    return resumo_abastecimento_veiculo(
+    resultado = resumo_abastecimento_veiculo(
         placa.upper()
     )
-    
+
+    if resultado == "Veículo não encontrado":
+        raise HTTPException(
+            status_code=404,
+            detail=resultado
+        )
+
+    return resultado  
     
     
     
