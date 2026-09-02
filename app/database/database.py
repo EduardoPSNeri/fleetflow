@@ -1,10 +1,13 @@
-"""
-Responsável pela configuração do banco de dados.
-
-Cria a conexão, fornece sessões e inicializa as tabelas.
-"""
 import sqlite3
 
+
+def inicializar_banco():
+    criar_tabela_veiculos()
+    criar_tabela_motoristas()
+    criar_tabela_abastecimentos()
+    criar_tabela_diario_bordo()
+    criar_tabela_manutencoes()
+    
 
 def conectar():
     conexao = sqlite3.connect("fleetflow.db")
