@@ -11,11 +11,31 @@ router = APIRouter(
 )
 
 
-@router.get("/")
+@router.get(
+    "/",
+    response_model=list[ManutencaoResponse]
+)
 def listar():
     return listar_manutencoes()
 
 
+@router.get(
+    "/{placa}/historico",
+    response_model=list[ManutencaoResponse]
+)
+def historico(placa: str):
+    resultado = historico_manutencoes_veiculo(
+        placa.upper()
+    )
+
+    if resultado == "Veículo não encontrado":
+        raise HTTPException(
+            status_code=404,
+            detail=resultado
+        )
+
+    return resultado 
+    
 @router.post("/", status_code=201)
 def cadastrar(manutencao: ManutencaoCreate):
     resultado = cadastrar_manutencao(
@@ -45,15 +65,6 @@ def cadastrar(manutencao: ManutencaoCreate):
 
     return {"message": resultado}
 
-
-@router.get("/{placa}/historico")
-def historico(placa: str):
-    return historico_manutencoes_veiculo(
-        placa.upper()
-    )
-    
-    
-    
     
     
     
