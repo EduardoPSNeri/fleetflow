@@ -48,6 +48,7 @@ def cadastrar(veiculo: VeiculoCreate):
             detail="Veículo já cadastrado"
         )
 
+    
     if resultado in [
         "Placa inválida",
         "Placa Mercosul invalida",
@@ -57,7 +58,12 @@ def cadastrar(veiculo: VeiculoCreate):
             status_code=400,
             detail=resultado
         )
-
+        
+    if resultado == "Erro de integridade ao cadastrar veículo":
+        raise HTTPException(
+            status_code=409,
+            detail=resultado
+        )
     return {"message": resultado}
 
     

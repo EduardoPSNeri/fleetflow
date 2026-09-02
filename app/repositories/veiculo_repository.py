@@ -1,32 +1,40 @@
 from app.database.database import conectar
- 
+import sqlite3 
     
 def adicionar_veiculo_banco(numero_frota, placa, marca, modelo, km, ativo):
     conexao = conectar()
     cursor = conexao.cursor()
 
-    cursor.execute("""
-        INSERT INTO veiculos (
+    try:
+        cursor.execute("""
+            INSERT INTO veiculos (
+                numero_frota,
+                placa,
+                marca,
+                modelo,
+                km,
+                ativo
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (
             numero_frota,
             placa,
             marca,
             modelo,
             km,
             ativo
-        )
-        VALUES (?, ?, ?, ?, ?, ?)
-    """, (
-        numero_frota,
-        placa,
-        marca,
-        modelo,
-        km,
-        ativo
-    ))
+        ))
 
-    conexao.commit()
-    conexao.close()
-    
+        conexao.commit()
+
+        return True
+
+    except sqlite3.IntegrityError:
+        return False
+
+    finally:
+        conexao.close()   
+
 
 def listar_veiculos_banco():
     conexao = conectar()

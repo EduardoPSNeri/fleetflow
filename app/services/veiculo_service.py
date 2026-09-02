@@ -1,6 +1,6 @@
 from app.models.veiculo_model import Veiculo
 from app.repositories.veiculo_repository import (buscar_placa_banco, adicionar_veiculo_banco, 
-buscar_ultimo_numero_frota_banco, atualizar_km_banco, atualizar_status_veiculo_banco, listar_veiculos_banco)
+buscar_ultimo_numero_frota_banco, atualizar_km_banco, atualizar_status_veiculo_banco, listar_veiculos_banco, )
 
 ## validações 
 
@@ -101,7 +101,7 @@ def cadastrar_veiculo(placa, marca, modelo, km, combustiveis):
     
     novo_veiculo = Veiculo(proximo_numero, placa, marca, modelo, km, combustiveis)
     
-    adicionar_veiculo_banco(
+    resultado = adicionar_veiculo_banco(
         novo_veiculo.numero_frota,
         novo_veiculo.placa,
         novo_veiculo.marca,
@@ -109,6 +109,10 @@ def cadastrar_veiculo(placa, marca, modelo, km, combustiveis):
         novo_veiculo.km,
         novo_veiculo.ativo
     )
+        
+    if not resultado:
+        return "Erro de integridade ao cadastrar veículo"
+    
     return "Veículo cadastrado com sucesso"
 
 

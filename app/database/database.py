@@ -1,5 +1,5 @@
 import sqlite3
-
+from pathlib import Path
 
 def inicializar_banco():
     criar_tabela_veiculos()
@@ -9,8 +9,15 @@ def inicializar_banco():
     criar_tabela_manutencoes()
     
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+CAMINHO_BANCO = BASE_DIR / "fleetflow.db"
+
+
 def conectar():
-    conexao = sqlite3.connect("fleetflow.db")
+    conexao = sqlite3.connect(CAMINHO_BANCO)
+
+    conexao.execute("PRAGMA foreign_keys = ON")
+
     return conexao
 
 
@@ -23,8 +30,8 @@ def criar_tabela_veiculos():
 #cria a tabela apenas se ela ainda não existir
     cursor.execute("""CREATE TABLE IF NOT EXISTS veiculos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            numero_frota INTEGER,
-            placa TEXT,
+            numero_frota INTEGER ,
+            placa TEXT UNIQUE,
             marca TEXT,
             modelo TEXT,
             km REAL,
@@ -53,7 +60,9 @@ def criar_tabela_abastecimentos():
             quantidade_litro REAL,
             valor_total REAL,
             media_consumo REAL,
-            custo_por_km REAL
+            custo_por_km REAL,
+
+            FOREIGN KEY (veiculo_id) REFERENCES veiculos(id)
         )
     """)
 
@@ -69,8 +78,8 @@ def criar_tabela_motoristas():
         CREATE TABLE IF NOT EXISTS motoristas (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             nome TEXT,
-            cpf TEXT,
-            cnh TEXT,
+            cpf TEXT UNIQUE,
+            cnh TEXT ,
             categoria_cnh TEXT,
             ativo INTEGER
         )
@@ -93,7 +102,10 @@ def criar_tabela_diario_bordo():
             hora_saida TEXT,
             km_saida REAL,
             hora_chegada TEXT,
-            km_chegada REAL
+            km_chegada REAL,
+
+            FOREIGN KEY (veiculo_id) REFERENCES veiculos(id),
+            FOREIGN KEY (motorista_id) REFERENCES motoristas(id)
         )
     """)
 
@@ -114,7 +126,9 @@ def criar_tabela_manutencoes():
             descricao TEXT,
             data TEXT,
             km REAL,
-            valor REAL
+            valor REAL,
+
+            FOREIGN KEY (veiculo_id) REFERENCES veiculos(id)
         )
     """)
 

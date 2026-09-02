@@ -1,17 +1,29 @@
-from app.services.manutencao_service import (
-    cadastrar_manutencao,
-    historico_manutencoes_veiculo
-)
+from app.database.database import conectar
 
-print(cadastrar_manutencao(
-    "GHI-7890",
-    "Preventiva",
-    "Troca de óleo",
-    "02/09/2026",
-    101150,
-    350.00
+
+conexao = conectar()
+cursor = conexao.cursor()
+
+cursor.execute("""
+    INSERT INTO diario_bordo (
+        veiculo_id,
+        motorista_id,
+        data,
+        hora_saida,
+        km_saida,
+        hora_chegada,
+        km_chegada
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+""", (
+    999,
+    999,
+    "2026-09-02",
+    "08:00",
+    1000,
+    None,
+    None
 ))
 
-print(historico_manutencoes_veiculo(
-    "GHI-7890"
-))
+conexao.commit()
+conexao.close()
