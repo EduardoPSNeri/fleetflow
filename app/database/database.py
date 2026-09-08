@@ -30,7 +30,7 @@ def criar_tabela_veiculos():
 #cria a tabela apenas se ela ainda não existir
     cursor.execute("""CREATE TABLE IF NOT EXISTS veiculos (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            numero_frota INTEGER ,
+            numero_frota INTEGER UNIQUE,
             placa TEXT UNIQUE,
             marca TEXT,
             modelo TEXT,

@@ -7,7 +7,7 @@ from app.routers.motoristas import router as motoristas_router
 from app.routers.abastecimentos import router as abastecimentos_router
 from app.routers.diario_bordo import router as diario_bordo_router
 from app.routers.manutencoes import router as manutencoes_router
-
+from app.routers.dashboard import router as dashboard_router
 
 app = FastAPI()
 
@@ -19,3 +19,4 @@ app.include_router(motoristas_router)
 app.include_router(abastecimentos_router)
 app.include_router(diario_bordo_router)
 app.include_router(manutencoes_router)
+app.include_router(dashboard_router)
