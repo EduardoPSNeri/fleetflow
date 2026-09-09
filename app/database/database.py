@@ -113,7 +113,6 @@ def criar_tabela_diario_bordo():
     conexao.close()
 
 
-
 def criar_tabela_manutencoes():
     conexao = conectar()
     cursor = conexao.cursor()
@@ -135,6 +134,30 @@ def criar_tabela_manutencoes():
 
     conexao.commit()
     conexao.close()
+
+
+def criar_tabela_trocas_oleo():
+    conexao = conectar()
+    cursor = conexao.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS trocas_oleo (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            veiculo_id INTEGER,
+            data TEXT,
+            km REAL,
+            tipo_oleo TEXT,
+            proxima_troca_km REAL,
+            valor REAL,
+
+            FOREIGN KEY (veiculo_id) REFERENCES veiculos(id)
+        )
+    """)
+
+    conexao.commit()
+    conexao.close()
+
+
 
 
 

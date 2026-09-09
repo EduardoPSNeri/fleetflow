@@ -155,7 +155,7 @@ def listar_alertas_manutencao():
             "status": status
         })
 
-        ordem_status = {
+    ordem_status = {
         "Vencida": 0,
         "Próximo": 1,
         "OK": 2
