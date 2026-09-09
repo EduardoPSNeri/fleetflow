@@ -7,6 +7,7 @@ def inicializar_banco():
     criar_tabela_abastecimentos()
     criar_tabela_diario_bordo()
     criar_tabela_manutencoes()
+    criar_tabela_trocas_oleo()
     
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent

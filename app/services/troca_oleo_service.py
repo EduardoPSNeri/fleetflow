@@ -1,8 +1,5 @@
 from app.repositories.troca_oleo_repository import (
-    adicionar_troca_oleo_banco,
-    listar_trocas_oleo_banco,
-    trocas_oleo_por_veiculo_banco
-)
+    adicionar_troca_oleo_banco, listar_trocas_oleo_banco, trocas_oleo_por_veiculo_banco, buscar_alertas_troca_oleo_banco)
 
 from app.repositories.veiculo_repository import buscar_placa_banco
 
@@ -88,6 +85,53 @@ def historico_trocas_oleo(placa):
         })
 
     return resultado
+
+
+def listar_alertas_troca_oleo():
+    trocas = buscar_alertas_troca_oleo_banco()
+
+    alertas = []
+
+    for troca in trocas:
+        placa = troca[0]
+        km_atual = troca[1]
+        tipo_oleo = troca[2]
+        proxima_troca_km = troca[3]
+
+        km_restantes = proxima_troca_km - km_atual
+
+        if km_restantes <= 0:
+            status = "Vencida"
+
+        elif km_restantes <= 1000:
+            status = "Próximo"
+
+        else:
+            status = "OK"
+
+        alertas.append({
+            "placa": placa,
+            "tipo_oleo": tipo_oleo,
+            "km_atual": km_atual,
+            "proxima_troca_km": proxima_troca_km,
+            "km_restantes": km_restantes,
+            "status": status
+        })
+
+    ordem_status = {
+        "Vencida": 0,
+        "Próximo": 1,
+        "OK": 2
+    }
+
+    alertas.sort(
+        key=lambda alerta: (
+            ordem_status[alerta["status"]],
+            alerta["km_restantes"]
+        )
+    )
+
+    return alertas
 
 
 

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
 from app.schemas.troca_oleo_schema import TrocaOleoCreate
+from app.services.troca_oleo_service import listar_alertas_troca_oleo
 
 from app.services.troca_oleo_service import (
     cadastrar_troca_oleo,
@@ -51,6 +52,11 @@ def cadastrar(troca: TrocaOleoCreate):
     return {
         "mensagem": resultado
     }
+
+
+@router.get("/alertas")
+def alertas():
+    return listar_alertas_troca_oleo()
 
 
 @router.get("/{placa}/historico")

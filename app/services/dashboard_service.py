@@ -1,7 +1,8 @@
 from app.repositories.dashboard_repository import (buscar_resumo_veiculos_banco, buscar_resumo_abastecimentos_banco,
 buscar_resumo_manutencoes_banco, buscar_resumo_motoristas_banco, buscar_veiculo_maior_custo_banco,
-buscar_ranking_custos_banco, buscar_manutencoes_por_veiculo_banco, buscar_media_consumo_por_veiculo_banco )
+buscar_ranking_custos_banco, buscar_manutencoes_por_veiculo_banco, buscar_media_consumo_por_veiculo_banco, buscar_resumo_trocas_oleo_banco )
 from app.services.manutencao_service import (listar_alertas_manutencao)
+from app.services.troca_oleo_service import (listar_alertas_troca_oleo)
 
 
 def resumo_dashboard():
@@ -14,10 +15,14 @@ def resumo_dashboard():
     manutencoes_por_veiculo = buscar_manutencoes_por_veiculo_banco()
     media_consumo_por_veiculo = buscar_media_consumo_por_veiculo_banco()
     alertas_manutencao = listar_alertas_manutencao()
+    alertas_troca_oleo = listar_alertas_troca_oleo()
+    trocas_oleo = buscar_resumo_trocas_oleo_banco()
 
     total_combustivel = abastecimentos[1] or 0
     total_manutencoes = manutencoes[1] or 0
-    custo_total_frota = total_combustivel + total_manutencoes
+    total_trocas_oleo = trocas_oleo[1] or 0
+    custo_total_frota = total_combustivel + total_manutencoes + total_trocas_oleo
+    
 
     if veiculos[0] > 0:
         custo_medio_por_veiculo = round(custo_total_frota / veiculos[0], 2)
@@ -75,6 +80,21 @@ def resumo_dashboard():
         elif alerta["status"] == "Vencida":
             total_vencidos += 1
         
+    oleo_ok = 0
+    oleo_proximos = 0
+    oleo_vencidos = 0
+
+    for alerta in alertas_troca_oleo:
+        if alerta["status"] == "OK":
+            oleo_ok += 1
+
+        elif alerta["status"] == "Próximo":
+            oleo_proximos += 1
+
+        elif alerta["status"] == "Vencida":
+            oleo_vencidos += 1    
+            
+            
                      
     return {
         "total_veiculos": veiculos[0],
@@ -86,6 +106,8 @@ def resumo_dashboard():
         "total_manutencoes": manutencoes[0],
         "total_gasto_manutencoes": total_manutencoes,
         "custo_total_frota": custo_total_frota,
+        "total_trocas_oleo": trocas_oleo[0],
+        "total_gasto_trocas_oleo": total_trocas_oleo,
         "custo_medio_por_veiculo": custo_medio_por_veiculo,
         "media_consumo_por_veiculo": media_consumo_formatada,
         "melhor_consumo": melhor_consumo,
@@ -94,6 +116,11 @@ def resumo_dashboard():
         "ok": total_ok,
         "proximos": total_proximos,
         "vencidos": total_vencidos
+},
+    "alertas_troca_oleo": {
+    "ok": oleo_ok,
+    "proximos": oleo_proximos,
+    "vencidos": oleo_vencidos
 },
         
         "manutencoes_por_veiculo": manutencoes_formatadas,
