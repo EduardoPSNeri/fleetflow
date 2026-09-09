@@ -1,5 +1,5 @@
 from app.repositories.manutencao_repository import (
-    adicionar_manutencao_banco, manutencoes_por_veiculo_banco, listar_manutencoes_banco)
+    adicionar_manutencao_banco, manutencoes_por_veiculo_banco, listar_manutencoes_banco, buscar_alertas_manutencao_banco)
 from app.repositories.veiculo_repository import (
     buscar_placa_banco
 )
@@ -30,7 +30,9 @@ def cadastrar_manutencao(
     descricao,
     data,
     km,
-    valor
+    valor,
+    proximo_km
+    
 ):
     veiculo = buscar_placa_banco(placa)
 
@@ -47,6 +49,9 @@ def cadastrar_manutencao(
     if not valor_valido:
         return mensagem
 
+    if proximo_km is not None and proximo_km <= km:
+        return "Próximo KM inválido"
+
     km_atual = veiculo[5]
 
     if km > km_atual:
@@ -60,7 +65,8 @@ def cadastrar_manutencao(
         descricao,
         data,
         km,
-        valor
+        valor,
+        proximo_km
     )
 
     return "Manutenção cadastrada com sucesso"
@@ -91,7 +97,8 @@ def historico_manutencoes_veiculo(placa):
             "descricao": manutencao[3],
             "data": manutencao[4],
             "km": manutencao[5],
-            "valor": manutencao[6]
+            "valor": manutencao[6],
+            "proximo_km": manutencao[7]
         })
 
     return resultado
@@ -110,10 +117,59 @@ def listar_manutencoes():
             "descricao": manutencao[3],
             "data": manutencao[4],
             "km": manutencao[5],
-            "valor": manutencao[6]
+            "valor": manutencao[6],
+            "proximo_km":manutencao[7]
         })
 
     return resultado
+
+
+def listar_alertas_manutencao():
+    manutencoes = buscar_alertas_manutencao_banco()
+
+    alertas = []
+
+    for manutencao in manutencoes:
+        placa = manutencao[0]
+        km_atual = manutencao[1]
+        descricao = manutencao[2]
+        proximo_km = manutencao[3]
+
+        km_restantes = proximo_km - km_atual
+
+        if km_restantes <= 0:
+            status = "Vencida"
+
+        elif km_restantes <= 1000:
+            status = "Próximo"
+
+        else:
+            status = "OK"
+
+        alertas.append({
+            "placa": placa,
+            "descricao": descricao,
+            "km_atual": km_atual,
+            "proximo_km": proximo_km,
+            "km_restantes": km_restantes,
+            "status": status
+        })
+
+        ordem_status = {
+        "Vencida": 0,
+        "Próximo": 1,
+        "OK": 2
+    }
+
+    alertas.sort(
+        key=lambda alerta: (
+            ordem_status[alerta["status"]],
+            alerta["km_restantes"]
+        )
+    )
+    return alertas
+
+
 
 
 

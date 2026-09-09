@@ -127,6 +127,7 @@ def criar_tabela_manutencoes():
             data TEXT,
             km REAL,
             valor REAL,
+            proximo_km REAL,
 
             FOREIGN KEY (veiculo_id) REFERENCES veiculos(id)
         )

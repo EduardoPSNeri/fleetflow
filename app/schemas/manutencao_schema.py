@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -8,6 +9,7 @@ class ManutencaoCreate(BaseModel):
     data: str
     km: float
     valor: float
+    proximo_km: Optional[float] = None
 
 
 class ManutencaoResponse(BaseModel):
@@ -18,6 +20,7 @@ class ManutencaoResponse(BaseModel):
     data: str
     km: float
     valor: float
+    proximo_km: Optional[float] = None
     
     
     

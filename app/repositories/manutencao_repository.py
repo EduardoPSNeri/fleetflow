@@ -7,7 +7,8 @@ def adicionar_manutencao_banco(
     descricao,
     data,
     km,
-    valor
+    valor,
+    proximo_km
 ):
     conexao = conectar()
     cursor = conexao.cursor()
@@ -19,16 +20,18 @@ def adicionar_manutencao_banco(
             descricao,
             data,
             km,
-            valor
+            valor,
+            proximo_km
         )
-        VALUES (?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     """, (
         veiculo_id,
         tipo,
         descricao,
         data,
         km,
-        valor
+        valor,
+        proximo_km
     ))
 
     conexao.commit()
@@ -68,7 +71,31 @@ def listar_manutencoes_banco():
     return manutencoes
 
 
+def buscar_alertas_manutencao_banco():
+    conexao = conectar()
+    cursor = conexao.cursor()
 
+    cursor.execute("""
+        SELECT
+            v.placa,
+            v.km,
+            m.descricao,
+            m.proximo_km
+        FROM manutencoes m
+
+        JOIN veiculos v
+            ON v.id = m.veiculo_id
+
+        WHERE m.proximo_km IS NOT NULL
+
+        ORDER BY m.proximo_km
+    """)
+
+    resultado = cursor.fetchall()
+
+    conexao.close()
+
+    return resultado
 
 
 
