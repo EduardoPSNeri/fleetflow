@@ -88,6 +88,13 @@ def buscar_alertas_manutencao_banco():
 
         WHERE m.proximo_km IS NOT NULL
 
+        AND m.id = (
+            SELECT MAX(m2.id)
+            FROM manutencoes m2
+            WHERE m2.veiculo_id = m.veiculo_id
+              AND m2.proximo_km IS NOT NULL
+        )
+
         ORDER BY m.proximo_km
     """)
 
