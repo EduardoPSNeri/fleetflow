@@ -118,35 +118,34 @@ def calcular_media_consumo_geral(historico):
     quantidade_medias = 0
 
     for abastecimento in historico:
-        
-        if  abastecimento[8] is not None:
-            soma_medias += abastecimento[8]
+
+        if abastecimento["media_consumo"] is not None:
+            soma_medias += abastecimento["media_consumo"]
             quantidade_medias += 1
-            
+
     if quantidade_medias == 0:
         return None
-           
+
     return soma_medias / quantidade_medias
-    
+
     
 def calcular_total_gasto(historico):
-    
-    total  = 0
-    
+
+    total = 0
+
     for abastecimento in historico:
-        total = total + abastecimento[7]
-        
+        total += abastecimento["valor_total"]
+
     return total
-    
+
     
 def calcular_total_litros(historico):
-    
+
     total = 0
-    
-    
+
     for abastecimento in historico:
-        total = total + abastecimento[6]
-        
+        total += abastecimento["quantidade_litro"]
+
     return total
     
     
@@ -156,15 +155,14 @@ def quantidade_abastecimento(historico):
 
 
 def calcular_distancia_historico(historico):
-    
     if len(historico) < 2:
         return None
-    
-    inicial_km = historico[0][3]
-    ultimo_km =  historico[-1][3]
- 
+
+    inicial_km = historico[0]["km"]
+    ultimo_km = historico[-1]["km"]
+
     distancia_percorrida = ultimo_km - inicial_km
-    
+
     return distancia_percorrida
 
 
@@ -175,13 +173,13 @@ def calcular_media_custo_por_km(historico):
 
     for abastecimento in historico:
 
-        if abastecimento[9] is not None:
-            soma_custos += abastecimento[9]
+        if abastecimento["custo_por_km"] is not None:
+            soma_custos += abastecimento["custo_por_km"]
             quantidade += 1
-            
-    if quantidade == 0 :
-         return None
-        
+
+    if quantidade == 0:
+        return None
+
     return soma_custos / quantidade
         
     

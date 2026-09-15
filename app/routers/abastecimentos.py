@@ -78,9 +78,7 @@ def resumo(placa: str):
             detail=resultado
         )
 
-    return resultado  
-    
-    
+    return resultado
     
     
     
