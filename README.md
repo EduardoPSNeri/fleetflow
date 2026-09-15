@@ -1,6 +1,6 @@
 # FleetFlow
 
-Sistema de gestão de frotas desenvolvido com Python, FastAPI e SQLite.
+API REST para gestão de frotas com Python, FastAPI, SQLite e arquitetura em camadas
 
 O FleetFlow foi criado para centralizar informações de veículos, motoristas, abastecimentos, diário de bordo, manutenções e trocas de óleo, aplicando regras de negócio e disponibilizando os dados por meio de uma API REST.
 
@@ -28,7 +28,7 @@ Repository
 SQLite
 
 Router
-
+````
 Responsável pelos endpoints HTTP da API.
 
 Service
