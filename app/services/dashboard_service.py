@@ -44,27 +44,31 @@ def resumo_dashboard():
             "placa": veiculo[0],
             "total_manutencoes": veiculo[1]
         })
-        
-        media_consumo_formatada = []
+
+
+    media_consumo_formatada = []
 
     for veiculo in media_consumo_por_veiculo:
         media_consumo_formatada.append({
             "placa": veiculo[0],
-            "media_consumo": round(veiculo[1], 2) if veiculo[1] is not None else None
+            "media_consumo": round(veiculo[1], 2)
+            if veiculo[1] is not None else None
         })
-        
-        veiculos_com_media = []
+
+
+    veiculos_com_media = []
 
     for veiculo in media_consumo_formatada:
         if veiculo["media_consumo"] is not None:
             veiculos_com_media.append(veiculo)
-            
-        if veiculos_com_media:
-            melhor_consumo = veiculos_com_media[0]
-            pior_consumo = veiculos_com_media[-1]
-        else:
-            melhor_consumo = None
-            pior_consumo = None
+
+
+    if veiculos_com_media:
+        melhor_consumo = veiculos_com_media[0]
+        pior_consumo = veiculos_com_media[-1]
+    else:
+        melhor_consumo = None
+        pior_consumo = None
                 
     total_ok = 0
     total_proximos = 0

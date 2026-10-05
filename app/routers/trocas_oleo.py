@@ -50,7 +50,7 @@ def cadastrar(troca: TrocaOleoCreate):
         )
 
     return {
-        "mensagem": resultado
+        "message": resultado
     }
 
 

@@ -60,7 +60,7 @@ def cadastrar(manutencao: ManutencaoCreate):
     if resultado in [
         "Tipo de manutenção inválido",
         "Valor de manutenção inválido",
-        "KM da manutenção inválido"
+        "KM da manutenção inválido",
         "Próximo KM inválido"
     ]:
         raise HTTPException(

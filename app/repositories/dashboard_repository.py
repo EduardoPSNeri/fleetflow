@@ -80,7 +80,9 @@ def buscar_veiculo_maior_custo_banco():
         SELECT
             v.placa,
             COALESCE(a.total_combustivel, 0) +
-            COALESCE(m.total_manutencao, 0) AS custo_total
+            COALESCE(m.total_manutencao, 0) +
+            COALESCE(o.total_troca_oleo, 0) AS custo_total
+
         FROM veiculos v
 
         LEFT JOIN (
@@ -98,6 +100,14 @@ def buscar_veiculo_maior_custo_banco():
             FROM manutencoes
             GROUP BY veiculo_id
         ) m ON m.veiculo_id = v.id
+
+        LEFT JOIN (
+            SELECT
+                veiculo_id,
+                SUM(valor) AS total_troca_oleo
+            FROM trocas_oleo
+            GROUP BY veiculo_id
+        ) o ON o.veiculo_id = v.id
 
         ORDER BY custo_total DESC
         LIMIT 1

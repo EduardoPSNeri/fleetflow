@@ -11,6 +11,10 @@ router = APIRouter(
     tags=["Motoristas"]
 )
 
+@router.get("/", response_model=list[MotoristaResponse])
+def listar():
+    return listar_motoristas
+
 
 @router.post("/", status_code=201)
 def cadastrar(motorista: MotoristaCreate):
